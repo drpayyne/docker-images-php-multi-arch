@@ -1,5 +1,5 @@
-ARG IMAGE_NAME="davidalger/php"
-ARG PHP_VERSION
+ENV IMAGE_NAME drpayyne/php-multi-arch
+ENV PHP_VERSION 7.4
 FROM ${IMAGE_NAME}:${PHP_VERSION}
 
 RUN set -eux \
