@@ -1,6 +1,6 @@
 FROM centos:8
 
-ARG PHP_VERSION
+ENV PHP_VERSION 7.4
 ARG PHP_EXTENSIONS="bcmath cli common gd gmp intl json mbstring \
     mcrypt sodium mysqlnd opcache pdo pecl-msgpack pecl-amqp pecl-redis pecl-imagick pecl-zip process soap xml xmlrpc"
 
