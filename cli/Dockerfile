@@ -1,4 +1,4 @@
-FROM centos:8
+FROM fedora:34
 
 ENV PHP_VERSION 7.4
 ARG PHP_EXTENSIONS="bcmath cli common gd gmp intl json mbstring \
@@ -9,10 +9,7 @@ RUN dnf update -y \
     && rm -rf /var/cache/dnf
 
 RUN set -eux \
-    && dnf install -y epel-release \
-    && dnf install -y https://rpms.remirepo.net/enterprise/remi-release-8.rpm \
-    && dnf module reset php -y \
-    && dnf module install -y php:remi-${PHP_VERSION} \
+    && dnf install -y php \
     && PHP_VERSION=$(echo ${PHP_VERSION} | awk -F '.' '{print $1$2}') \
     && PHP_PACKAGES= && for PKG in ${PHP_EXTENSIONS}; do \
         if [[ ${PKG} = "mcrypt" ]] && (( ${PHP_VERSION} > 71 )); then continue; fi; \
