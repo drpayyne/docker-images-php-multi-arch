@@ -1,6 +1,4 @@
-ENV IMAGE_NAME drpayyne/php-multi-arch
-ENV PHP_VERSION 7.4
-FROM ${IMAGE_NAME}:${PHP_VERSION}
+FROM drpayyne/php-multi-arch:7.4
 
 RUN set -eux \
     && dnf install -y php-fpm \
