@@ -1,13 +1,14 @@
-ARG IMAGE_NAME="davidalger/php"
-ARG PHP_VERSION
-FROM ${IMAGE_NAME}:${PHP_VERSION}
+FROM drpayyne/php-multi-arch:7.4
+
+ARG TARGETARCH
 
 # Install and enable Source Gaurdian loader
 RUN PHP_VERSION=$(php -v | head -n1 | cut -d' ' -f2 | cut -d. -f1-2) \
     && mkdir -p /tmp/sourceguardian \
     && cd /tmp/sourceguardian \
-    && curl -Os https://www.sourceguardian.com/loaders/download/loaders.linux-x86_64.tar.gz \
-    && tar xzf loaders.linux-x86_64.tar.gz \
+    && ARCH=$(if [ "$TARGETARCH" = "arm64" ]; then echo aarch64; else echo x86_64; fi;) \
+    && curl -Os https://www.sourceguardian.com/loaders/download/loaders.linux-$ARCH.tar.gz \
+    && tar xzf loaders.linux-$ARCH.tar.gz \
     && cp ixed.${PHP_VERSION}.lin "$(php -i | grep '^extension_dir =' | cut -d' ' -f3)/sourceguardian.so" \
     && echo "extension=sourceguardian.so" > /etc/php.d/15-sourceguardian.ini \
     && rm -rf /tmp/sourceguardian
@@ -16,8 +17,9 @@ RUN PHP_VERSION=$(php -v | head -n1 | cut -d' ' -f2 | cut -d. -f1-2) \
 RUN PHP_VERSION=$(php -v | head -n1 | cut -d' ' -f2 | cut -d. -f1-2) \
     && mkdir -p /tmp/ioncube \
     && cd /tmp/ioncube \
-    && curl -Os https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz \
-    && tar xzf ioncube_loaders_lin_x86-64.tar.gz \
+    && ARCH=$(if [ "$TARGETARCH" = "arm64" ]; then echo aarch64; else echo x86-64; fi;) \
+    && curl -Os https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_$ARCH.tar.gz \
+    && tar xzf ioncube_loaders_lin_$ARCH.tar.gz \
     && IONCUBE_LOADER_PATH=ioncube/ioncube_loader_lin_${PHP_VERSION}.so \
     && if [[ -f ${IONCUBE_LOADER_PATH} ]]; then \
         cp ${IONCUBE_LOADER_PATH} "$(php -i | grep '^extension_dir =' | cut -d' ' -f3)/ioncube_loader.so" \
