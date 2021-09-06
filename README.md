@@ -1,7 +1,10 @@
 # PHP Docker Images
 
-![Docker Image CI](https://github.com/davidalger/docker-images-php/workflows/Docker%20Image%20CI/badge.svg)
-![Docker Pulls](https://img.shields.io/docker/pulls/davidalger/php.svg?label=Docker%20Pulls)
+![Docker Image Architures](https://img.shields.io/badge/architecture-arm64%20%7C%20amd64-success)
+![PHP Version](https://img.shields.io/badge/php-7.4-blue)
+![License](https://img.shields.io/github/license/drpayyne/docker-php)
+
+> This repository is forked from https://github.com/davidalger/docker-images-php to make the PHP 7.4 Docker images multi-arch. The below information is from the parent README and it may or may not be up-to-date.
 
 ## Supported Tags
 
