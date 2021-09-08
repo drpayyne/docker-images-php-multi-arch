@@ -1,8 +1,8 @@
-FROM drpayyne/php-multi-arch:7.4
+FROM ghcr.io/drpayyne/php-cli
 
 ARG TARGETARCH
 
-# Install and enable Source Gaurdian loader
+# Install and enable Source Guardian loader
 RUN PHP_VERSION=$(php -v | head -n1 | cut -d' ' -f2 | cut -d. -f1-2) \
     && mkdir -p /tmp/sourceguardian \
     && cd /tmp/sourceguardian \

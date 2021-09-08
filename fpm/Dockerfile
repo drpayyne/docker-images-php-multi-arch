@@ -1,4 +1,4 @@
-FROM drpayyne/php-multi-arch:7.4
+FROM ghcr.io/drpayyne/php-cli
 
 RUN set -eux \
     && dnf install -y php-fpm \
