@@ -1,4 +1,4 @@
-name: Docker Image PHP FPM Loaders
+name: PHP FPM with Loaders
 
 on: workflow_dispatch
 
