@@ -46,6 +46,7 @@ jobs:
           context: cli
           platforms: linux/amd64,linux/arm64
           push: true
+          build-args: PHP_VERSION=7.4
           tags: |
             drpayyne/php-multi-arch:7.4
             ghcr.io/drpayyne/php-cli:7.4
@@ -83,6 +84,7 @@ jobs:
           context: cli
           platforms: linux/amd64,linux/arm64
           push: true
+          build-args: PHP_VERSION=7.3
           tags: |
             drpayyne/php-multi-arch:7.3
             ghcr.io/drpayyne/php-cli:7.3
