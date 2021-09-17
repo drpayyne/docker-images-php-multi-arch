@@ -36,6 +36,6 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            drpayyne/php-multi-arch:7.4-fpm-loaders
-            ghcr.io/drpayyne/php-fpm-loaders:7.4
+            drpayyne/php-multi-arch:7.4-fpm-deb-loaders
+            ghcr.io/drpayyne/php-fpm-loaders:7.4-deb
             ghcr.io/drpayyne/php-fpm-loaders:latest
