@@ -38,3 +38,4 @@ jobs:
           tags: |
             drpayyne/php-multi-arch:7.4-fpm-deb
             ghcr.io/drpayyne/php-fpm:7.4-deb
+            ghcr.io/drpayyne/php-fpm:latest
