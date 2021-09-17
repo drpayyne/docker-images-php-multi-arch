@@ -1,42 +1,32 @@
-FROM ghcr.io/drpayyne/php-cli-loaders
+FROM ghcr.io/drpayyne/php-fpm:7.4-deb
 
-RUN set -eux \
-    && dnf install -y php-fpm \
-    && dnf clean all \
-    && rm -rf /var/cache/dnf
+# Initialze target architecture build argument
+ARG TARGETARCH
 
-RUN set -eux; \
-	cd /etc; \
-	{ \
-		echo '[global]'; \
-		echo 'error_log = /proc/self/fd/2'; \
-		echo; \
-		echo '[www]'; \
-		echo '; if we send this to /proc/self/fd/1, it never appears'; \
-		echo 'access.log = /proc/self/fd/2'; \
-		echo; \
-		echo 'clear_env = no'; \
-		echo; \
-		echo '; Ensure worker stdout and stderr are sent to the main error log.'; \
-		echo 'catch_workers_output = yes'; \
-	} | tee php-fpm.d/docker.conf; \
-	{ \
-		echo '[global]'; \
-		echo 'daemonize = no'; \
-		echo; \
-		echo '[www]'; \
-		echo 'listen = 9000'; \
-	} | tee php-fpm.d/zz-docker.conf; \
-    perl -pi -e 's/^(pid|error_log|daemonize)/;$1/g' /etc/php-fpm.conf; \
-    perl -pi -e 's/^(listen)/;$1/g' /etc/php-fpm.d/www.conf; \
-    perl -pi -e 's/^(php_admin_(value|flag))/;$1/g' /etc/php-fpm.d/www.conf
+# Install and enable Source Guardian loader
+RUN PHP_VERSION=$(php -v | head -n1 | cut -d' ' -f2 | cut -d. -f1-2) \
+    && mkdir -p /tmp/sourceguardian \
+    && cd /tmp/sourceguardian \
+    && ARCH=$(if [ "$TARGETARCH" = "arm64" ]; then echo aarch64; else echo x86_64; fi;) \
+    && curl -Os https://www.sourceguardian.com/loaders/download/loaders.linux-$ARCH.tar.gz \
+    && tar xzf loaders.linux-$ARCH.tar.gz \
+    && cp ixed.${PHP_VERSION}.lin "$(php -i | grep '^extension_dir =' | cut -d' ' -f3)/sourceguardian.so" \
+    && echo "extension=sourceguardian.so" > /etc/php.d/15-sourceguardian.ini \
+    && rm -rf /tmp/sourceguardian
 
-COPY docker-entrypoint /usr/local/bin
-ENTRYPOINT ["docker-entrypoint"]
-
-# Override stop signal to stop process gracefully
-# https://github.com/php/php-src/blob/17baa87faddc2550def3ae7314236826bc1b1398/sapi/fpm/php-fpm.8.in#L163
-STOPSIGNAL SIGQUIT
-
-EXPOSE 9000
-CMD ["php-fpm"]
+# Install and enable IonCube loader
+RUN PHP_VERSION=$(php -v | head -n1 | cut -d' ' -f2 | cut -d. -f1-2) \
+    && mkdir -p /tmp/ioncube \
+    && cd /tmp/ioncube \
+    && ARCH=$(if [ "$TARGETARCH" = "arm64" ]; then echo aarch64; else echo x86-64; fi;) \
+    && curl -Os https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_$ARCH.tar.gz \
+    && tar xzf ioncube_loaders_lin_$ARCH.tar.gz \
+    && IONCUBE_LOADER_PATH=ioncube/ioncube_loader_lin_${PHP_VERSION}.so \
+    && if [[ -f ${IONCUBE_LOADER_PATH} ]]; then \
+        cp ${IONCUBE_LOADER_PATH} "$(php -i | grep '^extension_dir =' | cut -d' ' -f3)/ioncube_loader.so" \
+            && echo "zend_extension=ioncube_loader.so" > /etc/php.d/01-ioncube-loader.ini; \
+    else \
+        >&2 printf "\033[33mWARNING\033[0m: IonCube loaders for PHP_VERSION %s could not be found at %s\n" \
+            "${PHP_VERSION}" "${IONCUBE_LOADER_PATH}"; \
+    fi \
+    && rm -rf /tmp/ioncube
