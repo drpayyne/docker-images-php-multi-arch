@@ -1,4 +1,5 @@
-FROM ghcr.io/drpayyne/php-fpm:7.4-deb
+ARG PHP_TAG
+FROM ghcr.io/drpayyne/php-fpm:${PHP_TAG}
 
 # Initialze target architecture build argument
 ARG TARGETARCH
