@@ -1,6 +1,16 @@
 name: PHP FPM
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      from:
+        description: "Tag to pull"
+        default: '7.4.23-fpm-bullseye'
+        required: true
+      to:
+        description: "Tag to push"
+        default: '7.4-deb'
+        required: true
 
 jobs:
   docker:
@@ -35,7 +45,8 @@ jobs:
           context: fpm
           platforms: linux/amd64,linux/arm64
           push: true
+          build-args: |
+            PHP_TAG=${{ github.event.inputs.from }}
           tags: |
-            drpayyne/php-multi-arch:7.4-fpm-deb
-            ghcr.io/drpayyne/php-fpm:7.4-deb
+            ghcr.io/drpayyne/php-fpm:${{ github.event.inputs.to }}
             ghcr.io/drpayyne/php-fpm:latest

@@ -1,4 +1,5 @@
-FROM php:7.4.23-fpm-bullseye
+ARG PHP_TAG
+FROM php:${PHP_TAG}
 
 # Refresh apt
 RUN set -eux \
