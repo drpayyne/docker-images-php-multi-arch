@@ -11,4 +11,4 @@
 - [PHP FPM](https://github.com/drpayyne/docker-php/pkgs/container/php-fpm): `php-fpm:7.4-deb`, `php-fpm:7.3-deb`
 - [PHP FPM with Loaders](https://github.com/drpayyne/docker-php/pkgs/container/php-fpm-loaders): `php-fpm-loaders:7.4-deb`, `php-fpm-loaders:7.3-deb`
 
-Only PHP 7.4 is currently available in this project. Please contact the maintainer to request more versions. The _loaders_ packages include both Source Guardian and IonCube loaders. 
+Only PHP 7.4 and 7.3 is currently available in this project. Please contact the maintainer to request more versions. The _loaders_ packages include both Source Guardian and IonCube loaders. 
