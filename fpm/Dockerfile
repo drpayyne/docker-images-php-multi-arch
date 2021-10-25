@@ -10,7 +10,7 @@ RUN set -eux \
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
 # List of PHP extensions
-ARG PHP_EXTENSIONS="amqp bcmath gd gmp imagick intl msgpack opcache pdo_mysql redis soap xmlrpc xsl zip"
+ARG PHP_EXTENSIONS="amqp bcmath gd gmp imagick intl msgpack opcache pdo_mysql redis soap sockets xmlrpc xsl zip"
 
 # Install PHP extensions and other utilities
 RUN chmod +x /usr/local/bin/install-php-extensions && sync \
