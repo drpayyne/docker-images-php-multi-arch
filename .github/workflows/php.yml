@@ -1,9 +1,79 @@
 name: PHP Full
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      php81:
+        description: "PHP 8.1 (latest)"
+        default: '0'
+        required: false
+      php74:
+        description: "PHP 7.4"
+        default: '0'
+        required: false
 
 jobs:
-  docker:
+  php81:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push PHP CLI
+        uses: docker/build-push-action@v2
+        with:
+          context: cli
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            drpayyne/php-multi-arch:8.1
+            ghcr.io/drpayyne/php-cli:8.1
+            ghcr.io/drpayyne/php-cli:latest
+      - name: Build and push PHP CLI with Loaders
+        uses: docker/build-push-action@v2
+        with:
+          context: cli-loaders
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            drpayyne/php-multi-arch:8.1-loaders
+            ghcr.io/drpayyne/php-cli-loaders:8.1
+            ghcr.io/drpayyne/php-cli-loaders:latest
+      - name: Build and push PHP FPM
+        uses: docker/build-push-action@v2
+        with:
+          context: fpm
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            drpayyne/php-multi-arch:8.1-fpm
+            ghcr.io/drpayyne/php-fpm:8.1
+            ghcr.io/drpayyne/php-fpm:latest
+      - name: Build and push PHP FPM with Loaders
+        uses: docker/build-push-action@v2
+        with:
+          context: fpm-loaders
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            drpayyne/php-multi-arch:8.1-fpm-loaders
+            ghcr.io/drpayyne/php-fpm-loaders:8.1
+            ghcr.io/drpayyne/php-fpm-loaders:latest
+  php74:
     runs-on: ubuntu-latest
     steps:
       -
@@ -38,7 +108,6 @@ jobs:
           tags: |
             drpayyne/php-multi-arch:7.4
             ghcr.io/drpayyne/php-cli:7.4
-            ghcr.io/drpayyne/php-cli:latest
       -
         name: Build and push PHP CLI with Loaders
         uses: docker/build-push-action@v2
@@ -49,7 +118,6 @@ jobs:
           tags: |
             drpayyne/php-multi-arch:7.4-loaders
             ghcr.io/drpayyne/php-cli-loaders:7.4
-            ghcr.io/drpayyne/php-cli-loaders:latest
       -
         name: Build and push PHP FPM
         uses: docker/build-push-action@v2
@@ -60,7 +128,6 @@ jobs:
           tags: |
             drpayyne/php-multi-arch:7.4-fpm
             ghcr.io/drpayyne/php-fpm:7.4
-            ghcr.io/drpayyne/php-fpm:latest
       -
         name: Build and push PHP FPM with Loaders
         uses: docker/build-push-action@v2
@@ -71,4 +138,3 @@ jobs:
           tags: |
             drpayyne/php-multi-arch:7.4-fpm-loaders
             ghcr.io/drpayyne/php-fpm-loaders:7.4
-            ghcr.io/drpayyne/php-fpm-loaders:latest
