@@ -15,7 +15,7 @@ ARG PHP_EXTENSIONS="amqp bcmath gd gmp imagick intl msgpack opcache pdo_mysql re
 
 # Install PHP extensions and other utilities
 RUN set -eux; \
-    chmod +x /usr/local/bin/install-php-extensions ; sync; \
+    chmod +x /usr/local/bin/install-php-extensions; sync; \
 	install-php-extensions ${PHP_EXTENSIONS}; \
 	apt-get update; \
     apt-get install -y --no-install-recommends git npm gettext unzip pwgen nmap ncat jq; \
