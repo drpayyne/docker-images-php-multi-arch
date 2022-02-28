@@ -1,6 +1,12 @@
 ARG PHP_TAG
 FROM php:${PHP_TAG}
 
+# Install all updates
+RUN set -eux; \
+    apt-get update -y; \
+    apt-get upgrade -y; \
+    rm -rf /var/lib/apt/lists/*
+
 # Install PHP extension installer
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
