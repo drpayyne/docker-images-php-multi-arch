@@ -18,7 +18,7 @@ RUN set -eux; \
     chmod +x /usr/local/bin/install-php-extensions; sync; \
 	install-php-extensions ${PHP_EXTENSIONS}; \
 	apt-get update; \
-    apt-get install -y --no-install-recommends git npm gettext unzip pwgen nmap ncat jq; \
+    apt-get install -y --no-install-recommends git openssh-client npm gettext unzip pwgen nmap ncat jq; \
     rm -rf /var/lib/apt/lists/*
 
 # Set primary INI file and PHP memory limit
